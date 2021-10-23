@@ -57,11 +57,11 @@ digitalWrite(MOTOR0_ENABLE , LOW);
 digitalWrite(MOTOR0_ENABLE , LOW);
 digitalWrite(MOTOR0_ENABLE , LOW);
 digitalWrite(MOTOR0_ENABLE , LOW);
+// digitalWrite(BEEPER, HIGH); // test if board is running code without lcd
 // Connect the Stepper Library To the Correct Pins 
 Xstepper.connectToPins(MOTOR0_STEP_PIN, MOTOR0_DIRECTION_PIN);
 Ystepper.connectToPins(MOTOR1_STEP_PIN, MOTOR1_DIRECTION_PIN);
 Zstepper.connectToPins(MOTOR2_STEP_PIN, MOTOR2_DIRECTION_PIN);
 E0stepper.connectToPins(MOTOR3_STEP_PIN, MOTOR3_DIRECTION_PIN);
 E1stepper.connectToPins(MOTOR4_STEP_PIN, MOTOR4_DIRECTION_PIN);
-
 }
