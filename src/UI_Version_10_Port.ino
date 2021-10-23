@@ -26,11 +26,11 @@ since we are not multiplexing the drivers meaning there is only one Uart wire pe
 
 
 
-TMC2209Stepper driverX(A9, 40, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
-TMC2209Stepper driverY(A11, 42, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
-TMC2209Stepper driverZ(A12, 44, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
-TMC2209Stepper driverE0(A10, A5, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
-TMC2209Stepper driverE1(A4, A3, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
+TMC2209Stepper driverX(PC4, PA6, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
+TMC2209Stepper driverY(PD11, PA6, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
+TMC2209Stepper driverZ(PC6, PA6, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
+TMC2209Stepper driverE0(PC7, PA6, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
+TMC2209Stepper driverE1(PF2, PA6, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Software serial X axis
 
 
 #ifdef U8X8_HAVE_HW_SPI // UI Communications protocal not sure if this is neassary or not used from example.
@@ -48,7 +48,7 @@ int Ypos_MAX = 500;// MAy Y length in MM
 int AOA_MAX = 500; // Angle of attack max in 360 degrees
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Pin Define~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Define the LCD Pins ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-U8G2_ST7920_128X64_F_SW_SPI u8g2(U8G2_R0, /* clock=*/ 25, /* data=*/ 29, /* CS=*/ 27, /* reset=*/ 16);
+U8G2_ST7920_128X64_F_SW_SPI u8g2(U8G2_R0, /* clock=*/ PE13, /* data=*/ PE15, /* CS=*/ PE14, /* reset=*/ PE10);
 // Define the LCD Type and Pins Reset is currently pin 29 which us unused or unconnected on the board.
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MOTION CONTROL  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -172,7 +172,7 @@ void setup(void) {
   PIN_SETUP(); // Initilize all the Pins 
   SET_ACELL(-100, 500, 500, 500); // Set motor acceleration
   SET_SPEED(150, 2000, 200, 200); // Set motor Speed
-  u8g2.begin(/* menu_select_pin= */ 35, /* menu_next_pin= */ 17, /* menu_prev_pin= */ 23, /* menu_home_pin= */ 52 );
+  u8g2.begin(/* menu_select_pin= */ PE7, /* menu_next_pin= */ PE9, /* menu_prev_pin= */ PE12, /* menu_home_pin= */ PC15); // pc 15 was selected at random to be an un used pin
   // Leave this outside the Pin Define and in the main dir. As it also serves as a class defintion. 
   // Define the System Font see https://github.com/olikraus/u8g2/wiki/u8g2reference for more information about the commands
   u8g2.setFont(u8g2_font_6x12_tr);
