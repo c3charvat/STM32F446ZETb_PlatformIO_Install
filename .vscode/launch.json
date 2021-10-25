@@ -1,0 +1,47 @@
+// AUTOMATICALLY GENERATED FILE. PLEASE DO NOT MODIFY IT MANUALLY
+//
+// PIO Unified Debugger
+//
+// Documentation: https://docs.platformio.org/page/plus/debugging.html
+// Configuration: https://docs.platformio.org/page/projectconf/section_env_debug.html
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug",
+            "executable": "C:/Users/Collin/Documents/PlatformIO/Projects/STM32F446ZETb_PlatformIO_Install/.pio/build/octopus_minimal/firmware.elf",
+            "projectEnvName": "octopus_minimal",
+            "toolchainBinDir": "C:/Users/Collin/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/Collin/.platformio/platforms/ststm32/misc/svd/STM32F446x.svd",
+            "preLaunchTask": {
+                "type": "PlatformIO",
+                "task": "Pre-Debug (octopus_minimal)"
+            }
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (skip Pre-Debug)",
+            "executable": "C:/Users/Collin/Documents/PlatformIO/Projects/STM32F446ZETb_PlatformIO_Install/.pio/build/octopus_minimal/firmware.elf",
+            "projectEnvName": "octopus_minimal",
+            "toolchainBinDir": "C:/Users/Collin/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/Collin/.platformio/platforms/ststm32/misc/svd/STM32F446x.svd"
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (without uploading)",
+            "executable": "C:/Users/Collin/Documents/PlatformIO/Projects/STM32F446ZETb_PlatformIO_Install/.pio/build/octopus_minimal/firmware.elf",
+            "projectEnvName": "octopus_minimal",
+            "toolchainBinDir": "C:/Users/Collin/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/Collin/.platformio/platforms/ststm32/misc/svd/STM32F446x.svd",
+            "loadMode": "manual"
+        }
+    ]
+}
