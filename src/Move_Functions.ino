@@ -6,19 +6,21 @@
 //  "Serial Cont. Ext.T.\n"; 5        // 3 and 5 are the same
 
 void MOVE_FUNCTION(void) { // Selection =0
-  if (Com_selection == 2) { // If in LCD MODE
-    // Parse Out The Data into the correct move variable
-    movevar[0] = ABS_POS(Xpos, 1); // X Move
-    movevar[1] = ABS_POS(Ypos, 2); // Y and Z Move  // Pull Data From LCD MENU VARIBLES
-    movevar[2] = ABS_POS(AoA[0], 3); // E0 Move AoA Top
-    movevar[3] = ABS_POS(AoA[1], 4); // E1 Move AoA Bottom
-  }
-  else {
-    movevar[0] = ABS_POS(Position_Data[0], 1);
-    movevar[1] = ABS_POS(Position_Data[1], 2);
-    movevar[2] = ABS_POS(Position_Data[2], 3); // We are in Serial Mode PULL in pharsed data
-    movevar[3] = ABS_POS(Position_Data[3], 4);
-  }
+ if (Motion_selection != 2){ // If we arent in LCD Mode This avoids onyl 1 stepper moving
+    if (Com_selection == 2) { // If in LCD MODE
+      // Parse Out The Data into the correct move variable
+      movevar[0] = ABS_POS(Xpos, 1); // X Move
+      movevar[1] = ABS_POS(Ypos, 2); // Y and Z Move  // Pull Data From LCD MENU VARIBLES
+      movevar[2] = ABS_POS(AoA[0], 3); // E0 Move AoA Top
+      movevar[3] = ABS_POS(AoA[1], 4); // E1 Move AoA Bottom
+    }
+    else {
+      movevar[0] = ABS_POS(Position_Data[0], 1);
+      movevar[1] = ABS_POS(Position_Data[1], 2);
+      movevar[2] = ABS_POS(Position_Data[2], 3); // We are in Serial Mode PULL in pharsed data
+      movevar[3] = ABS_POS(Position_Data[3], 4);
+    }
+ } 
   // End parsing out data
   if (Motion_selection == 1 || Motion_selection == 4 ) { // if in static mode
     // Normal Mode LCD
@@ -40,11 +42,6 @@ void MOVE_FUNCTION(void) { // Selection =0
   }
   if (Motion_selection == 2) {
     // LCD Trigger mode
-    Xstepper.setupRelativeMoveInSteps(movevar[0] / (Degree_per_step[0] / Micro_stepping[0]));
-    Ystepper.setupRelativeMoveInSteps(movevar[1] / (Degree_per_step[1] / Micro_stepping[1]));
-    Zstepper.setupRelativeMoveInSteps(movevar[1] / (Degree_per_step[1] / Micro_stepping[1]));
-    E0stepper.setupRelativeMoveInSteps(movevar[2] / (Degree_per_step[2] / Micro_stepping[2])); 
-    E1stepper.setupRelativeMoveInSteps(movevar[3] / (Degree_per_step[3] / Micro_stepping[3])); 
     // Let the UI command issue move commands and just keep issuing this string untill the desired settings are made
     // We need to make sure that this doesnt log multiple moves
 

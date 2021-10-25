@@ -63,7 +63,7 @@ int Stepper_acell[5]; // setpper accleration array initliazation // modified for
 int Stepper_speed[5]; // modified for new motherboard this wont get used though since the extra stepper is going to mirror another axis
 uint8_t*  Acceleration; // for the LCD UI
 uint8_t*  Speed;        // For the LCD UI
-int Micro_stepping[5] = {256, 256, 256, 256, 256}; //mirco stepping for the drivers // E ,Z, X, Y, E2 // modified for new mothermoard
+int Micro_stepping[5] = {64, 64, 64, 64, 64}; //mirco stepping for the drivers // E ,Z, X, Y, E2 // modified for new mothermoard
 float Degree_per_step[5] = {1.8, 1.8, 1.8, 1.8, 1.8}; //mirco stepping for the drivers // E ,Z, X, Y, E2 // modified for new mothermoard
 //
 
@@ -139,18 +139,18 @@ float movevar[5]; // E ,Z, X, Y , E2 // modified for new motherboard this wont g
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Acelleration/ Speed Set/ Trigger Functions  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void SET_ACELL(float x, float y, float E0, float E1) {
   Xstepper.setAccelerationInRevolutionsPerSecondPerSecond(x);
-  Ystepper.setAccelerationInStepsPerSecondPerSecond(y);
-  Zstepper.setAccelerationInStepsPerSecondPerSecond(y); // By Default the Z axis will allways be attached to the Y (Verticle Axis)
-  E0stepper.setAccelerationInStepsPerSecondPerSecond(E0); // Change to mm/s when the system is being implmented
-  E1stepper.setAccelerationInStepsPerSecondPerSecond(E1); // Change to mm/s when the system is being implmented
+  Ystepper.setAccelerationInRevolutionsPerSecondPerSecond(y);
+  Zstepper.setAccelerationInRevolutionsPerSecondPerSecond(y); // By Default the Z axis will allways be attached to the Y (Verticle Axis)
+  E0stepper.setAccelerationInRevolutionsPerSecondPerSecond(E0); // Change to mm/s when the system is being implmented
+  E1stepper.setAccelerationInRevolutionsPerSecondPerSecond(E1); // Change to mm/s when the system is being implmented
   //  E2stepper.setAccelerationInStepsPerSecondPerSecond(*put axis its mirrioring here*);
 }
 void SET_SPEED(int x, int y, int E0, int E1) {
   Xstepper.setSpeedInRevolutionsPerSecond(x);
-  Ystepper.setSpeedInStepsPerSecond(y);
-  Zstepper.setSpeedInStepsPerSecond(y); // Change to mm/s^2 when the system is being implmented
-  E0stepper.setSpeedInStepsPerSecond(E0); // Change to mm/s^2 when the system is being implmented ?
-  E1stepper.setSpeedInStepsPerSecond(E1);
+  Ystepper.setSpeedInRevolutionsPerSecond(y);
+  Zstepper.setSpeedInRevolutionsPerSecond(y); // Change to mm/s^2 when the system is being implmented
+  E0stepper.setSpeedInRevolutionsPerSecond(E0); // Change to mm/s^2 when the system is being implmented ?
+  E1stepper.setSpeedInRevolutionsPerSecond(E1);
   //  E2stepper.setSpeedInStepsPerSecond(*Axis its mirrioring here*);
 }
 void TRIGGER_WAIT(int pin) {
@@ -170,8 +170,8 @@ void setup(void) {
   Serial.println("PUT LCD INTO DESIRED MODE AND SERIAL COMMUNCATION -->BEFORE<-- YOU INPUT --->ANYTHING<---!!!\n");
   Serial.println("");
   PIN_SETUP(); // Initilize all the Pins 
-  SET_ACELL(-100, 500, 500, 500); // Set motor acceleration
-  SET_SPEED(150, 2000, 200, 200); // Set motor Speed
+  SET_ACELL(400, 400, 400, 400); // Set motor acceleration
+  SET_SPEED(1000,1200, 1400, 1600); // Set motor Speed
   u8g2.begin(/* menu_select_pin= */ PE7, /* menu_next_pin= */ PE9, /* menu_prev_pin= */ PE12, /* menu_home_pin= */ PC15); // pc 15 was selected at random to be an un used pin
   // Leave this outside the Pin Define and in the main dir. As it also serves as a class defintion. 
   // Define the System Font see https://github.com/olikraus/u8g2/wiki/u8g2reference for more information about the commands
@@ -194,7 +194,7 @@ void loop(void) {
   if ( current_selection == 1 ) {
         // X movement
     //u8g2.userInterfaceInputValue( "X movment:", "", &X_value[0] , 0, 3 , 1 , " *-* Thousands of MM "); // Removed at the request of Dr. Y Functionality preserved
-    u8g2.userInterfaceInputValue( "X movment:", "", &X_value[1] , 0, 3 , 1 , " *-* Hundreds of MM ");
+    u8g2.userInterfaceInputValue( "X movment:", "", &X_value[1] , 0, 5 , 1 , " *-* Hundreds of MM ");
     u8g2.userInterfaceInputValue( "X movment:", "", &X_value[2] , 0, 60 , 2 , " *-* Tens/Ones MM ");
     u8g2.userInterfaceInputValue( "X movment:", "", &X_value[3] , 0, 9 , 1 , " *-* Decimal MM ");
     Xpos = X_value[0] * 1000 + X_value[1] * 100 + X_value[2] + X_value[3] / 10; // add the two intgers toghter into a float because jesus its so much easier to work with the intger
@@ -242,7 +242,16 @@ void loop(void) {
     u8g2.userInterfaceMessage("", "", "Ready to Go?", " Ok \n Cancel ");
     if (Go_Pressed == 1 ) {
       // digitalWrite(27, HIGH);// Sound Buzzer That The Control Borad is waiting on user
-      while ((!E0stepper.motionComplete()) || (!E1stepper.motionComplete()) || (!Zstepper.motionComplete()) || (!Xstepper.motionComplete()) || (!Ystepper.motionComplete())) { // While
+      movevar[0] = ABS_POS(Xpos, 1); // X Move
+      movevar[1] = ABS_POS(Ypos, 2); // Y and Z Move  // Pull Data From LCD MENU VARIBLES
+      movevar[2] = ABS_POS(AoA[0], 3); // E0 Move AoA Top
+      movevar[3] = ABS_POS(AoA[1], 4); // E1 Move AoA Bottom
+    Xstepper.setupRelativeMoveInSteps(movevar[0] / (Degree_per_step[0] / Micro_stepping[0]));
+    Ystepper.setupRelativeMoveInSteps(movevar[1] / (Degree_per_step[1] / Micro_stepping[1]));
+    Zstepper.setupRelativeMoveInSteps(movevar[1] / (Degree_per_step[1] / Micro_stepping[1]));
+    E0stepper.setupRelativeMoveInSteps(movevar[2] / (Degree_per_step[2] / Micro_stepping[2])); 
+    E1stepper.setupRelativeMoveInSteps(movevar[3] / (Degree_per_step[3] / Micro_stepping[3])); 
+        while ((!E0stepper.motionComplete()) || (!E1stepper.motionComplete()) || (!Zstepper.motionComplete()) || (!Xstepper.motionComplete()) || (!Ystepper.motionComplete())) { 
       Xstepper.processMovement();
       Ystepper.processMovement();
       Zstepper.processMovement();   // moving the Steppers here was a simple soltuion to having to do system interups and blah blah.

@@ -53,9 +53,9 @@ pinMode(ENCODER_RT, INPUT); // Encoder Move Direction
 pinMode(ENCODER_LT, INPUT); // Encoder Move Direction 
 // Stepper Enables 
 digitalWrite(MOTOR0_ENABLE , LOW); // Set the Enable Pin to Low to Enable the Driver 
-digitalWrite(MOTOR0_ENABLE , LOW);
-digitalWrite(MOTOR0_ENABLE , LOW);
-digitalWrite(MOTOR0_ENABLE , LOW);
+digitalWrite(MOTOR1_ENABLE , LOW);
+digitalWrite(MOTOR2_ENABLE , LOW);
+digitalWrite(MOTOR3_ENABLE , LOW);
 digitalWrite(MOTOR0_ENABLE , LOW);
 // digitalWrite(BEEPER, HIGH); // test if board is running code without lcd
 // Connect the Stepper Library To the Correct Pins 
