@@ -8,15 +8,7 @@
 Sd2Card card;
 SdFatFs fatFs; // Create Classes 
 
-//  SD Card Read Function
-#ifndef SD_DETECT_PIN
-#define SD_DETECT_PIN SD_DETECT_NONE
-#endif
-
-Sd2Card card;
-SdFatFs fatFs;
-
-void setup()
+void SD_setup()
 {
   bool disp = false;
   // Open serial communications and wait for port to open:
