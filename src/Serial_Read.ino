@@ -83,15 +83,21 @@ Serial.println("Got to parse data\n");
             // Home The Y Axis
           }
           if (strtokIndx[0] == 'A' || strtokIndx[0] == 'a') { // if the first character is A -> Meaning AoA
-            if (strtokIndx[3] == 'T' || strtokIndx[0] == 't') { // if the third character is T -> Meaning AoAT
+            if (strtokIndx[3] == 'T' || strtokIndx[3] == 't') { // if the third character is T -> Meaning AoAT
               // Home AoA Top here
             }
-            if (strtokIndx[3] == 'B' || strtokIndx[0] == 'b') { // if the third character is B -> Meaning AoAB
+            if (strtokIndx[3] == 'B' || strtokIndx[3] == 'b') { // if the third character is B -> Meaning AoAB
               // Home AoA Bottom here
             }
           }
         } // end while
       } // End else
+    }
+    else if(isdigit(strtokIndx[0]))
+    {
+      Serial.print("G-code entered does not match the correct format please try again when prompted\n");
+      strtokIndx = NULL; // exit the while loop
+      return false; // tell the system this command failed
     }
     else {
       // If it Gets here its in the Form <G X##.##>
@@ -107,17 +113,17 @@ Serial.println("Got to parse data\n");
           Temp_Pos[1] = atof(substr); // Assign the value to the Y position
         }
         if (strtokIndx[0] == 'A' || strtokIndx[0] == 'a') { // if the first character is A -> Meaning AoA
-          if (strtokIndx[3] == 'T' || strtokIndx[0] == 't') { // if the third character is T -> Meaning AoAT
+          if (strtokIndx[3] == 'T' || strtokIndx[3] == 't') { // if the third character is T -> Meaning AoAT
             char* substr = strtokIndx + 4; // This Truncates the chacters "AoAT"
             Temp_Pos[2] = atof(substr); // Assign the value to the AoAT position
           }
-          if (strtokIndx[3] == 'B' || strtokIndx[0] == 'b') { // if the third character is B -> Meaning AoAB
+          if (strtokIndx[3] == 'B' || strtokIndx[3] == 'b') { // if the third character is B -> Meaning AoAB
             char* substr = strtokIndx + 4;// This Truncates the chacters "AoAB"
             Temp_Pos[3] = atof(substr); // Assign the value to the AoAB position
           }
         }
         if(strtokIndx == NULL) {
-          Serial.print("G-code entered does not match the correct format please try again when prompted");
+          Serial.print("G-code entered does not match the correct format please try again when prompted\n");
           strtokIndx = NULL; // exit the while loop
           return false; // tell the system this command failed
         }
@@ -143,32 +149,40 @@ Serial.println("Got to parse data\n");
     return true; // Tell the system that the function worked
   }              // End G code parsing
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MCODE Section ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// M A X###.## Y###.## AoAT###.## AoAB###.## or M S X###.## Y###.## AoAT###.## AoAB###.##
   if (strtokIndx[0] == 'M' || strtokIndx[0] == 'm')
-  {         
-                            // If the First Char is M                                                                   // M code Starts here
+  { // If the First Char is M
+    Serial.println(("strtokIndx[0] == M or m; strtokIndx[0] == " + std::string(strtokIndx)).c_str());
     strtokIndx = strtok(NULL, " "); // Get the second token "A or S"
-
+    Serial.println(("Got next strtokIndx; strtokIndx[0] == " + std::string(strtokIndx)).c_str());
     if (strtokIndx[0] == 'A' || strtokIndx[0] == 'a')
     {
+      Serial.println("strtokIndx[0] == A or a");
       Setting_Num = 0; // i intoduced this varible because we will lose the A as this is a singly linked list (Forward)
     }
-    if (strtokIndx[0] == 'S' || strtokIndx[0] == 'S')
+    else if (strtokIndx[0] == 'S' || strtokIndx[0] == 's')
     {
+      Serial.println("strtokIndx[0] == S or a");
       Setting_Num = 1;
     }
-    if (strtokIndx[0] == 'D' || strtokIndx[0] == 'D')
+    else if (strtokIndx[0] == 'D' || strtokIndx[0] == 'D')
     {
+      Serial.println("strtokIndx[0] == D or d");
       strtokIndx = strtok(NULL, " "); // if it starts with a D get the next one
+      Serial.println("strtokIndx = strtok() called.");
       if (strtokIndx[0] == 'M' || strtokIndx[0] == 'm')
       {
+        Serial.println("strtokIndx[0] == M or m");
         Setting_Num = 2;
       }
       if (strtokIndx[0] == 'P' || strtokIndx[0] == 'p')
       {
+        Serial.println("strtokIndx[0] == P or p");
         Setting_Num = 3;
       }
       if (strtokIndx[0] == 'S' || strtokIndx[0] == 's')
       {
+        Serial.println("strtokIndx[0] == S or s");
         Setting_Num = 4;
       }
     }
@@ -178,8 +192,10 @@ Serial.println("Got to parse data\n");
       return false; // tell the system this command failed
     }
     strtokIndx = strtok(NULL, " "); // process next string segment // This returns the next token "X##.##" then "Y##.##"...
+    Serial.println(("strtokIndx == " + std::string(strtokIndx)).c_str());
     if (isdigit(strtokIndx[0]))
     {
+      Serial.println("Got to assigning numbers");
       Temp_Settings[0] = atof(strtokIndx); // Setting is for all Axis
       Temp_Settings[1] = atof(strtokIndx);
       Temp_Settings[2] = atof(strtokIndx);
@@ -187,34 +203,41 @@ Serial.println("Got to parse data\n");
     }
     else
     {
+      Serial.println("Not a digit; About to enter temp-settings assignment while loop.");
       while (strtokIndx != NULL)
       {
+        Serial.println("Entered temp-settings assignment while loop.");
         if (strtokIndx[0] == 'X' || strtokIndx[0] == 'x')
         {                                  // if the first character is X
+          Serial.println("Assign X");
           char *substr = strtokIndx + 1;   // This Truncates the first char "X"
           Temp_Settings[0] = atof(substr); // Assign the value to the X position
         }
         if (strtokIndx[0] == 'Y' || strtokIndx[0] == 'y')
         {                                  // if the first character is Y
+          Serial.println("Assign Y.");
           char *substr = strtokIndx + 1;   // This Truncates the first char "Y"
           Temp_Settings[1] = atof(substr); // Assign the value to the Y position
         }
         if (strtokIndx[0] == 'A' || strtokIndx[0] == 'a')
         { // if the first character is A -> Meaning AoA
-          if (strtokIndx[3] == 'T' || strtokIndx[0] == 't')
+          Serial.println("strtokIndx[0] == A or a");
+          if (strtokIndx[3] == 'T' || strtokIndx[3] == 't')
           {                                  // if the third character is T -> Meaning AoAT
+            Serial.println("strtokIndx[0] == T or t");
             char *substr = strtokIndx + 4;   // This Truncates the chacters "AoAT"
             Temp_Settings[2] = atof(substr); // Assign the value to the AoAT position
           }
-          if (strtokIndx[3] == 'B' || strtokIndx[0] == 'b')
+          if (strtokIndx[3] == 'B' || strtokIndx[3] == 'b')
           {                                  // if the third character is B -> Meaning AoAB
+            Serial.println("strtokIndx[0] == B or b");
             char *substr = strtokIndx + 4;   // This Truncates the chacters "AoAB"
             Temp_Settings[3] = atof(substr); // Assign the value to the AoAB position
           }
         }
         else
         {
-          Serial.print("M-code entered does not match the correct format please try again when prompted");
+          Serial.print("M-code entered does not match the correct format please try again when prompted\n");
           strtokIndx = NULL; // exit the while loop
           return false;      // tell the system this command failed
         }
@@ -223,6 +246,7 @@ Serial.println("Got to parse data\n");
     }                                   // End Else Statment
     if (Setting_Num == 0)
     { // If Acceleration
+      Serial.println("Set acceleration");
       Acell_Data[0] = Temp_Settings[0];
       Acell_Data[1] = Temp_Settings[1];
       Acell_Data[2] = Temp_Settings[2];
@@ -232,6 +256,7 @@ Serial.println("Got to parse data\n");
     }
     if (Setting_Num == 1)
     { // Speed settings
+      Serial.println("Set speed");
       Speed_Data[0] = Temp_Settings[0];
       Speed_Data[1] = Temp_Settings[1];
       Speed_Data[2] = Temp_Settings[2];
@@ -241,13 +266,16 @@ Serial.println("Got to parse data\n");
     }
     if (Setting_Num == 2)
     { // Mirco stepping // 0,16,64,256
+      Serial.println("Setting_Num == 2; Microstepping");
       if (Temp_Settings[0] != 0 || Temp_Settings[0] != 16 || Temp_Settings[0] != 64 || Temp_Settings[0] != 256 || Temp_Settings[1] != 0 || Temp_Settings[1] != 16 || Temp_Settings[1] != 64 || Temp_Settings[1] != 256 ||
           Temp_Settings[2] != 0 || Temp_Settings[2] != 16 || Temp_Settings[2] != 64 || Temp_Settings[2] != 256 || Temp_Settings[3] != 0 || Temp_Settings[3] != 16 || Temp_Settings[3] != 64 || Temp_Settings[3] != 256)
       {
-        return false; // The entered number was one of the acctable inputs
+        Serial.println("Microstepping not an acceptable input");
+        return false; // The entered number was not one of the acctable inputs
       }
       else
       {
+        Serial.println("Setting microstepping");
         Micro_stepping[0] = Temp_Settings[0];  //x
         Micro_stepping[1] = Temp_Settings[1];  //y
         Micro_stepping[2] = Micro_stepping[1]; //Z is tied to y
@@ -263,6 +291,7 @@ Serial.println("Got to parse data\n");
     }
     if (Setting_Num == 3)
     { // Stepper Mode
+      Serial.println("Setting_Num == 3");
       if (Temp_Settings[0] != 0 || Temp_Settings[0] != 1)
       {
         return false; // The entered number was one of the acctable inputs
