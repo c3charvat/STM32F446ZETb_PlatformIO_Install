@@ -57,6 +57,12 @@ digitalWrite(MOTOR1_ENABLE , LOW);
 digitalWrite(MOTOR2_ENABLE , LOW);
 digitalWrite(MOTOR3_ENABLE , LOW);
 digitalWrite(MOTOR0_ENABLE , LOW);
+//SDCard Pins
+//pinMode(PC8, INPUT);
+//pinMode(PC9, INPUT);
+//pinMode(PC10, INPUT);
+//pinMode(PC11, INPUT);
+//pinMode(PC12, OUTPUT);
 // digitalWrite(BEEPER, HIGH); // test if board is running code without lcd
 // Connect the Stepper Library To the Correct Pins 
 Xstepper.connectToPins(MOTOR0_STEP_PIN, MOTOR0_DIRECTION_PIN);
