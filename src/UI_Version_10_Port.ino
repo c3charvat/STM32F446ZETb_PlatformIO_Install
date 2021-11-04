@@ -165,7 +165,7 @@ void TRIGGER_WAIT(int pin) {
 
 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETUP lOOP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void setup(void) {
-  //Serial.begin(9600); // Begin serial ouput communication for debug and input of value array.
+  Serial.begin(9600); // Begin serial ouput communication for debug and input of value array.
   //SD_setup();
   delay(5000); // dely five seconds so the monitor can connect first 
   DRIVER_SETUP();
