@@ -321,6 +321,7 @@ Serial.println("Got to parse data\n");
   else
   {
     Serial.println("Shouldn't Have made it here\n");
+    return false;
   }
 } // End Parsing Function
 

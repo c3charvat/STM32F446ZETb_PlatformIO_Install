@@ -41,11 +41,11 @@ TMC2209Stepper driverE1(PF2, PA6, .11f, DRIVER_ADDRESS ); // (RX, TX,RSENSE) Sof
 #endif
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Physcial System Char~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-int Xpos_MAX = 500; // Max X length in MM
-int Ypos_MAX = 500;// MAy Y length in MM
+const int Xpos_MAX = 500; // Max X length in MM
+const int Ypos_MAX = 500;// MAy Y length in MM
 // X lead screw pitch implment when the physcal system is desined and ready
 // Y lead screw pitch
-int AOA_MAX = 500; // Angle of attack max in 360 degrees
+const int AOA_MAX = 500; // Angle of attack max in 360 degrees
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Pin Define~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Define the LCD Pins ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 U8G2_ST7920_128X64_F_SW_SPI u8g2(U8G2_R0, /* clock=*/ PE13, /* data=*/ PE15, /* CS=*/ PE14, /* reset=*/ PE10);
@@ -167,7 +167,7 @@ void TRIGGER_WAIT(int pin) {
 void setup(void) {
   Serial.begin(9600); // Begin serial ouput communication for debug and input of value array.
   //SD_setup();
-  delay(5000); // dely five seconds so the monitor can connect first 
+  //delay(5000); // dely five seconds so the monitor can connect first 
   DRIVER_SETUP();
   Serial.println("PUT LCD INTO DESIRED MODE AND SERIAL COMMUNCATION -->BEFORE<-- YOU INPUT --->ANYTHING<---!!!\n");
   Serial.println("");

@@ -20,13 +20,13 @@ void MOVE_FUNCTION(void)
       movevar[2] = ABS_POS(AoA[0], 3); // E0 Move AoA Top
       movevar[3] = ABS_POS(AoA[1], 4); // E1 Move AoA Bottom
     }
-    else
+    else // Serial Mode
     {
       Serial.println("Com_selection != 2");
-      movevar[0] = ABS_POS(Position_Data[0], 1);
-      movevar[1] = ABS_POS(Position_Data[1], 2);
-      movevar[2] = ABS_POS(Position_Data[2], 3); // We are in Serial Mode PULL in pharsed data
-      movevar[3] = ABS_POS(Position_Data[3], 4);
+      movevar[0] = ABS_POS(Position_Data[0], 1); // X Pos 
+      movevar[1] = ABS_POS(Position_Data[1], 2); // Y pos
+      movevar[2] = ABS_POS(Position_Data[2], 3); // AoA Top  pos // We are in Serial Mode PULL in pharsed data
+      movevar[3] = ABS_POS(Position_Data[3], 4); // AoA Bottom
     }
   }
   // End parsing out data
